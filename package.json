@@ -1,0 +1,12 @@
+{
+  "name": "voicecraft-tts",
+  "version": "1.0.0",
+  "description": "ElevenLabs Text-to-Speech web app deployed on Netlify",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
