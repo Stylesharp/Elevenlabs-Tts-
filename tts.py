@@ -2,7 +2,7 @@ import os
 import argparse
 from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
-from elevenlabs import save
+from elevenlabs import save, VoiceSettings
 
 def main():
     # Load environment variables from .env file
@@ -21,6 +21,10 @@ def main():
     parser.add_argument("--voice", type=str, default="Rachel", help="The name of the voice to use (default: Rachel)")
     parser.add_argument("--output", type=str, default="output.mp3", help="Output file path (default: output.mp3)")
     parser.add_argument("--model", type=str, default="eleven_multilingual_v2", help="ElevenLabs model to use (default: eleven_multilingual_v2)")
+    parser.add_argument("--speed", type=float, default=1.0, help="Pacing/speed multiplier between 0.7 and 1.3 (default: 1.0)")
+    parser.add_argument("--stability", type=float, default=0.5, help="Voice stability between 0.0 and 1.0 (default: 0.5)")
+    parser.add_argument("--similarity", type=float, default=0.75, help="Similarity boost between 0.0 and 1.0 (default: 0.75)")
+    parser.add_argument("--style", type=float, default=0.0, help="Style exaggeration between 0.0 and 1.0 (default: 0.0)")
     
     args = parser.parse_args()
 
@@ -31,6 +35,7 @@ def main():
         print(f"Generating speech...")
         print(f"Text: '{args.text}'")
         print(f"Voice: {args.voice}")
+        print(f"Speed: {args.speed}x | Stability: {args.stability} | Similarity: {args.similarity}")
         
         # Resolve voice name to voice_id
         voice_id = args.voice
@@ -48,7 +53,14 @@ def main():
             text=args.text,
             voice_id=voice_id,
             model_id=args.model,
-            output_format="mp3_44100_128"
+            output_format="mp3_44100_128",
+            voice_settings=VoiceSettings(
+                stability=args.stability,
+                similarity_boost=args.similarity,
+                style=args.style,
+                use_speaker_boost=True,
+                speed=args.speed
+            )
         )
 
         # Save audio to file
